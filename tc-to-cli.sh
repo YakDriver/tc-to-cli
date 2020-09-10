@@ -2,14 +2,10 @@
 
 function tc-to-cli() {
   local filepath=$1
-  local filename=$(basename -- "$filepath")
-  local extension="${filename##*.}"
-  local filename_without_ext="${filename%.*}"
-  local temp_file="${filename_without_ext}_temp.${extension}"
+  local temp_file="${filepath}.bak"
 
-  cp "${filepath}" "${temp_file}"
-
-  sed -i.bak 1d "${temp_file}"
+  # creates a temp file we can use for rest of processing
+  sed -i.bak 1d "${filepath}"
 
   # pre process
   perl -p -i -e 's/\d+,([^,]+),OK,(\d+)/--- PASS: $1 ($2s)/g' "${temp_file}"
